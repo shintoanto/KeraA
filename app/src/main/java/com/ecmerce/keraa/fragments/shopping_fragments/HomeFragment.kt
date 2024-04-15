@@ -52,6 +52,8 @@ class HomeFragment : Fragment() {
         }.attach()
     }
 
+
+
     override fun onResume() {
         super.onResume()
         showBottomNav()

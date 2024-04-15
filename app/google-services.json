@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "835297093273",
+    "project_id": "keraa-306bd",
+    "storage_bucket": "keraa-306bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835297093273:android:a2d222d01ade4a4f233a08",
+        "android_client_info": {
+          "package_name": "com.ecmerce.keraa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPL6q_ANOGUl2oTfsDNiqP5br_SuQAHB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

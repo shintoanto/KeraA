@@ -1,5 +1,6 @@
 package com.ecmerce.keraa.model
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,7 @@ class LoginViewModel @Inject constructor(
 
     fun login(email: String, password: String) {
         if (email.isNotBlank() && password.isNotBlank()) {
+            Log.d("email", "$email + $password")
 
             viewModelScope.launch { _login.emit(Resource.Loading()) }
 
@@ -36,6 +38,7 @@ class LoginViewModel @Inject constructor(
                 viewModelScope.launch {
                     it.user?.let {
                         _login.emit(Resource.Success(it))
+                        Log.d("Ress", it.metadata.toString())
                     }
                 }
 

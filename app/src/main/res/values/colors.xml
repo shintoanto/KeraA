@@ -22,4 +22,11 @@
     <color name="g_red">#FF0000</color>
     <color name="g_text_hint">#969899</color>
     <color name="g_orange">#F8BA00</color>
+
+    // dark theme
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="backgroundColor">#121212</color>
+    <color name="textColor">#FFFFFF</color>
 </resources>

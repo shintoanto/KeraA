@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ecmerce.keraa.R
 import com.ecmerce.keraa.activity.LoginActivity
+import com.ecmerce.keraa.activity.ShoppingActivity
 import com.ecmerce.keraa.databinding.FragmentLoginBinding
 import com.ecmerce.keraa.model.LoginViewModel
 import com.ecmerce.keraa.util.Resource
@@ -80,9 +81,8 @@ class LoginFragment : Fragment() {
                     }
 
                     is Resource.Success -> {
-
                         binding.btnLogin.revertAnimation()
-                        Intent(requireActivity(), LoginActivity::class.java).also { intent ->
+                        Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
                             // This flag will help previous activity not showing when press back button
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
@@ -91,7 +91,7 @@ class LoginFragment : Fragment() {
 
                     is Resource.Error -> {
                         binding.btnLogin.revertAnimation()
-                        Log.d("Res", it.message.toString())
+                        Log.d("Res", it.data?.email.toString())
                         Toast.makeText(
                             requireContext(),
                             "Please check the fields you entered ${it.message.toString()}",

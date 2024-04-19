@@ -22,11 +22,12 @@ hilt = "2.44"
 parcelize = "1.1.1"
 googleServices = "4.4.1"
 firebaseAuth = "22.3.1"
-firebaseFirestore = "24.11.0"
+firebaseFirestore = "24.11.1"
 smoothbottombar = "1.7.9"
 firebaseMessaging = "23.4.1"
 stepview = "1.5.1"
 firebaseFirestoreKtx = "24.11.1"
+firebaseDatabase = "20.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +55,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 stepview = { module = "com.shuhart.stepview:stepview", version.ref = "stepview" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 
 

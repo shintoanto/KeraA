@@ -28,11 +28,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainCategoryFragment : Fragment() {
+open class MainCategoryFragment : Fragment() {
+
     private lateinit var binding: FragmentMainCategoryBinding
     private lateinit var specialProductsAdapter: SpecialProductsAdapter
     private lateinit var bestDealsAdapter: BestDealsAdapter
-    protected val bestProductsAdapter: BestProductAdaptr by lazy { BestProductAdaptr() }
+    private lateinit var bestProductsAdapter: BestProductAdaptr
     protected val offerAdapter: BestProductAdaptr by lazy { BestProductAdaptr() }
     private val viewModel by viewModels<MainCategoryViewModel>()
 
@@ -42,9 +43,12 @@ class MainCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentMainCategoryBinding.inflate(inflater, container, false)
+        FragmentMainCategoryBinding.inflate(inflater, container, false)
+            .let { fragmentMainCategoryBinding ->
 
-        return binding.root
+                binding = fragmentMainCategoryBinding
+                return binding.root
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,24 +59,24 @@ class MainCategoryFragment : Fragment() {
         setUpBestDealsProductsRv()
         setUpBestProducctsRv()
 
-        specialProductsAdapter.onClick = {
-            val bundle = Bundle().apply { putParcelable("product", it) }
-            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
-        }
-
-        bestDealsAdapter.onClick = {
-            val bundle = Bundle().apply { putParcelable("product", it) }
-            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
-        }
-
-        bestProductsAdapter.onClick = {
-            val bundle = Bundle().apply { putParcelable("product", it) }
-            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
-        }
+//        specialProductsAdapter.onClick = {
+//            val bundle = Bundle().apply { putParcelable("product", it) }
+//            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
+//        }
+//
+//        bestDealsAdapter.onClick = {
+//            val bundle = Bundle().apply { putParcelable("product", it) }
+//            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
+//        }
+//
+//        bestProductsAdapter.onClick = {
+//            val bundle = Bundle().apply { putParcelable("product", it) }
+//            findNavController().navigate(R.id.action_homeFragment_to_productDetilsFragment, bundle)
+//        }
 
 
         // doing pagination
-        binding.recyclerView3.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.bestDealsRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -109,36 +113,87 @@ class MainCategoryFragment : Fragment() {
     }
 
     private fun setUpBestProducctsRv() {
-
-        binding.recyclerView2.apply {
+        bestProductsAdapter = BestProductAdaptr()
+        binding.bestDealsRV.apply {
             adapter = bestProductsAdapter
+
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bestDeals.collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+
+                        is Resource.Success -> {
+                            Log.d("Res", it.data.toString())
+                            bestProductsAdapter.differ.submitList(it.data)
+                            hideLoading()
+
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                it.message.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+
+                    }
+                }
+            }
         }
     }
 
     private fun setUpBestDealsProductsRv() {
         bestDealsAdapter = BestDealsAdapter()
-        binding.recyclerView3.apply {
+        binding.specialDealsRV.apply {
             adapter = bestDealsAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bestProductDeals.collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+
+                        is Resource.Success -> {
+                            Log.d("Res", it.data.toString())
+                            bestDealsAdapter.differ.submitList(it.data)
+                            hideLoading()
+
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                it.message.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+
+                    }
+                }
+            }
         }
     }
 
-    private fun hideLoading() {
-        //
-    }
-
-    private fun showLoading() {
-        //
-    }
 
     private fun setUpSpecialProductsRv() {
         specialProductsAdapter = SpecialProductsAdapter()
-        binding.recyclerView1.apply {
+        binding.specialProductsRV.apply {
             adapter = specialProductsAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -172,6 +227,15 @@ class MainCategoryFragment : Fragment() {
                 }
             }
         }
+
+    }
+
+    private fun hideLoading() {
+        //
+    }
+
+    private fun showLoading() {
+        //
     }
 
     override fun onResume() {

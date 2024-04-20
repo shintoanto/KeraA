@@ -1,15 +1,14 @@
 package com.ecmerce.keraa.fragments.shopping_fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ecmerce.keraa.R
 import com.ecmerce.keraa.adapter.ColorsAdapter
 import com.ecmerce.keraa.adapter.SizeAdapter
 import com.ecmerce.keraa.adapter.ViewPager2Adapter
@@ -18,10 +17,12 @@ import com.ecmerce.keraa.databinding.FragmentProductDetailBinding
 import com.ecmerce.keraa.model.CartProductViewModel
 import com.ecmerce.keraa.util.Resource
 import com.ecmerce.keraa.util.hideBottomNav
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class ProductDetilsFragment : Fragment() {
     private lateinit var binding: FragmentProductDetailBinding
     private val viewPagerAdapter by lazy { ViewPager2Adapter() }
@@ -50,16 +51,16 @@ class ProductDetilsFragment : Fragment() {
         val products = productData.products
 
         binding.apply {
-            productName.text = products.name
-            productPrice.text = "${products.price}"
-            productDescription.text = products.description
+            productName.text = products?.name
+            productPrice.text = "${products?.price}"
+            productDescription.text = products?.description
 
         }
-        viewPagerAdapter.differ.submitList(products.images)
-        products.colors.let {
+        viewPagerAdapter.differ.submitList(products?.images)
+        products?.colors.let {
             colorAdapter.differ.submitList(it)
         }
-        products.sizes.let {
+        products?.sizes.let {
             sizeAdapter.differ.submitList(
                 it
             )
@@ -73,7 +74,7 @@ class ProductDetilsFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            viewModel.addToCartProduct(CartProduct(products, 1, selectedColor, selectedSize))
+            viewModel.addToCartProduct(CartProduct(products!!, 1, selectedColor, selectedSize))
         }
 
         lifecycleScope.launch {

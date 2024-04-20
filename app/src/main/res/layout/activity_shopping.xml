@@ -23,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:elevation="0dp"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+        app:itemIconTint="@drawable/bottom_nav_ripple_color_effect"
         app:itemPaddingBottom="10sp"
         app:itemPaddingTop="10sp"
         app:itemRippleColor="@color/g_white"

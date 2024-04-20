@@ -7,11 +7,13 @@ import com.ecmerce.keraa.firebase.FirebaseCommon
 import com.ecmerce.keraa.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class CartProductViewModel @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
@@ -23,6 +25,8 @@ class CartProductViewModel @Inject constructor(
 
 
     fun addToCartProduct(cartProduct: CartProduct) {
+        viewModelScope.launch { _cartProduct.emit(Resource.Loading()) }
+
         firebaseFirestore.collection("user").document(firebaseAuth.uid!!).collection("cartproduct")
             .whereEqualTo("product.id", cartProduct.product.id).get().addOnSuccessListener {
                 viewModelScope.launch {

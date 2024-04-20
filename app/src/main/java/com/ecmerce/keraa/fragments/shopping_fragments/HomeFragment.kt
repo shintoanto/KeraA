@@ -18,6 +18,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+
     private lateinit var binding: FragmentHomeBinding
 
     @Inject
@@ -26,27 +27,34 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         // Inflate the layout for this fragment
-
-        binding = FragmentHomeBinding.inflate(inflater)
-        return binding.root
-
+        FragmentHomeBinding.inflate(inflater).let { fragmentHomeBinding ->
+            binding = fragmentHomeBinding
+            return binding.root
+        }
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryFragment = arrayListOf<Fragment>(
+        arrayListOf<Fragment>(
             MainCategoryFragment(),
             ChaireFragment(),
             CupboardFragment(),
             TableFragment(),
             AccesoryFragment(),
             FurnitureFragment()
-        )
-        val adapterPager = HomeViewPagerAdapter(categoryFragment, childFragmentManager, lifecycle)
-        binding.viewPager.adapter = adapterPager
+        ).let { categoryFragment ->
+            HomeViewPagerAdapter(
+                categoryFragment,
+                childFragmentManager,
+                lifecycle
+            ).let { homeViewPagerAdapter ->
+                binding.viewPager.adapter = homeViewPagerAdapter
+            }
+        }
 
 
 
@@ -58,7 +66,6 @@ class HomeFragment : Fragment() {
                 3 -> tab.text = "Accessory"
                 4 -> tab.text = "Furniture"
             }
-
         }.attach()
 
         binding.logOut.setOnClickListener {
